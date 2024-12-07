@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Detección de Focos de Incendio</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            margin: 10px 0;
+        }
+        .report-fire-btn {
+            background-color: #ff4444;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .report-fire-btn:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+        #dashboard {
+            margin-top: 20px;
+        }
+        #messageDiv {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            padding: 15px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .card-title {
+            margin: 0 0 10px 0;
+            color: #333;
+        }
+        .card-text {
+            margin: 5px 0;
+            color: #666;
+        }
+        .text-muted {
+            color: #888;
+            font-size: 0.9em;
+        }
+        #reports-list {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Sistema de Detección de Focos de Incendio</h1>
+
+    <!-- Botón para conectar MetaMask -->
+    <button id="connectWalletBtn">Conectar con MetaMask</button>
+
+    <!-- Dirección de la wallet conectada -->
+    <div id="walletAddress" style="display:none;"></div>
+
+    <!-- Dashboard (visible solo después de la conexión) -->
+    <div id="dashboard" style="display:none;">
+        <h2>Planificación de Recorrido</h2>
+        <form id="routeForm">
+            <label for="waypoints">Puntos de Interés (Waypoints):</label><br>
+            <input type="text" id="waypoint1" placeholder="Latitud, Longitud (ej. 40.7128, -74.0060)" required /><br>
+            <input type="text" id="waypoint2" placeholder="Latitud, Longitud (ej. 34.0522, -118.2437)" required /><br>
+            <button type="submit">Enviar Planificación de Recorrido</button>
+        </form>
+
+        <h2>Subir Foto</h2>
+        <form id="uploadForm">
+            <input type="file" id="photo" name="photo" required />
+            <button type="submit">Subir Foto</button>
+        </form>
+    </div>
+    
+    <!-- Sección de Reportes -->
+    <div id="reports-section" class="mt-4">
+        <h2>Reportes de Fuego</h2>
+        <div id="reports-list" class="mt-3">
+            <!-- Aquí se mostrarán los reportes dinámicamente -->
+        </div>
+        <button id="refresh-reports" class="report-fire-btn">Actualizar Reportes</button>
+    </div>    
+
+    
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
