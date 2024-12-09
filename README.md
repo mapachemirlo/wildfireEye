@@ -282,7 +282,6 @@ Acceder al frontend en: `http://localhost:8080`
 - Sepolia Testnet: [https://sepolia.dev/](https://sepolia.dev/)
 
 ### Exploradores de Bloques
-- Sepolia: [https://sepolia.etherscan.io/](https://sepolia.etherscan.io/)
 - Arbitrum Sepolia: [https://sepolia.arbiscan.io/](https://sepolia.arbiscan.io/)
 
 ## Licencia
