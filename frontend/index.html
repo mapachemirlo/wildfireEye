@@ -3,99 +3,164 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema de Detección de Focos de Incendio</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            padding: 20px;
-        }
-        button {
-            padding: 10px 20px;
-            font-size: 16px;
-            margin: 10px 0;
-        }
-        .report-fire-btn {
-            background-color: #ff4444;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .report-fire-btn:disabled {
-            background-color: #cccccc;
-            cursor: not-allowed;
-        }
-        #dashboard {
-            margin-top: 20px;
-        }
-        #messageDiv {
-            margin-top: 10px;
-            padding: 10px;
-            border-radius: 5px;
-        }
-        .card {
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            padding: 15px;
-            background-color: #fff;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        .card-title {
-            margin: 0 0 10px 0;
-            color: #333;
-        }
-        .card-text {
-            margin: 5px 0;
-            color: #666;
-        }
-        .text-muted {
-            color: #888;
-            font-size: 0.9em;
-        }
-        #reports-list {
-            margin-top: 20px;
-        }
-    </style>
+    <title>WildfireEye</title>
+    <link rel="icon" type="image/png" href="assets/images/icon-wildfireye.png" sizes="16x16">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>Sistema de Detección de Focos de Incendio</h1>
+    <video autoplay muted loop class="hero-video" style="display:block;" id="video">
+        <source src="/assets/videos/dron.mp4" type="video/mp4">
+        Tu navegador no soporta video.
+    </video>
 
-    <!-- Botón para conectar MetaMask -->
-    <button id="connectWalletBtn">Conectar con MetaMask</button>
+    <nav class="navbar">
+        <a href="#" class="navbar-brand">WildfireEye</a>
+        <button class="hamburger" id="navbar-toggle">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <ul class="navbar-menu">
+            <li><a href="#about">Qué es WildfireEye</a></li>
+            <li><a href="#features">Features</a></li>
+            <li><a href="#links">Links</a></li>
+        </ul>
+    </nav>
 
     <!-- Dirección de la wallet conectada -->
-    <div id="walletAddress" style="display:none;"></div>
+    <div id="walletAddress" class="wallet-display wallet-display-desktop" style="display:none;">
+        <div class="wallet-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M19 7h-1V6a3 3 0 0 0-3-3H5a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3v-8a3 3 0 0 0-3-3zM5 5h10a1 1 0 0 1 1 1v1H5a1 1 0 0 1 0-2zm14 14H5a1 1 0 0 1-1-1V8h15a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1z" fill="currentColor"/>
+                <path d="M16 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4z" fill="currentColor"/>
+            </svg>
+        </div>
+        <span class="wallet-address"></span>
+    </div>
+    <div id="walletMessage" class="wallet-display-desktop update-message"></div>
 
+    <div id="hero" class="hero-section" style="display:block;">        
+
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1 class="hero-title">Sistema de Detección de Focos de Incendio</h1>
+                    <!-- Botón para conectar MetaMask -->
+                    <button id="connectWalletBtn">Conectar Wallet</button>
+                </div>
+                <!-- <div class="hero-image">
+                    <img src="assets/images/dron.jpg" alt="WildfireEye Hero Image">
+                </div> -->
+            </div>
+        </div>
+    </div>
+    
     <!-- Dashboard (visible solo después de la conexión) -->
     <div id="dashboard" style="display:none;">
-        <h2>Planificación de Recorrido</h2>
-        <form id="routeForm">
-            <label for="waypoints">Puntos de Interés (Waypoints):</label><br>
-            <input type="text" id="waypoint1" placeholder="Latitud, Longitud (ej. 40.7128, -74.0060)" required /><br>
-            <input type="text" id="waypoint2" placeholder="Latitud, Longitud (ej. 34.0522, -118.2437)" required /><br>
-            <button type="submit">Enviar Planificación de Recorrido</button>
-        </form>
+        
+        <!-- Dirección de la wallet conectada -->
+        <div id="walletAddress" class="wallet-display wallet-display-mobile" style="display:none;">
+            <div class="wallet-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M19 7h-1V6a3 3 0 0 0-3-3H5a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3v-8a3 3 0 0 0-3-3zM5 5h10a1 1 0 0 1 1 1v1H5a1 1 0 0 1 0-2zm14 14H5a1 1 0 0 1-1-1V8h15a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1z" fill="currentColor"/>
+                    <path d="M16 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4z" fill="currentColor"/>
+                </svg>
+            </div>
+            <span class="wallet-address"></span>
+        </div>
 
-        <h2>Subir Foto</h2>
-        <form id="uploadForm">
-            <input type="file" id="photo" name="photo" required />
-            <button type="submit">Subir Foto</button>
-        </form>
+        <div id="walletMessage" class="wallet-display-mobile update-message"></div>
+
+        <div class="dashboard-cards">
+            <div class="route-section">
+                <h2 class="route-title">Planificación de Recorrido</h2>
+                <form id="routeForm" class="route-form">
+                    <div class="form-group">
+                        <label for="waypoints">Puntos de Interés (Waypoints - Coordenadas)</label>
+                        <input type="text" id="waypoint1" placeholder="41.40338" required>
+                        <input type="text" id="waypoint2" placeholder="2.17403" required>
+                    </div>                
+                    <button type="submit" class="submit-route-btn">Enviar</button>
+                    <div id="routeMessage" class="route-message"></div>
+                </form>
+            </div>
+    
+            <div class="upload-section">
+                <div class="container-subir-foto-tooltip">
+                    <h2 class="upload-title">Subir Foto</h2>
+                    <span class="tooltip">?
+                        <span class="tooltiptext">Esto es un POC ya que la subida de fotos es para reemplazar la funcionalidad original de reconocimiento de imágenes a través de un modelo de IA entrenado para detectar focos de incendio. Suba una foto llamada 1.jpg para simular que no se detectó fuego y suba una foto llamada 2.jpg para detectar fuego.</span>
+                    </span>
+                </div>
+                
+
+                <form id="uploadForm" class="upload-form">
+                    <div class="upload-area">
+                        <label for="photo" class="upload-label">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 5V19M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <span>Seleccionar foto</span>
+                            <input type="file" id="photo" name="photo" required>
+                        </label>
+                        <div id="file-name" class="file-name"></div>
+                    </div>
+                    <button type="submit" class="upload-btn">Subir Foto</button>
+                    <div id="uploadMessage" class="upload-message"></div>
+                </form>
+            </div>
+        </div>        
+
+    </div>
+
+    <!-- Popup para alerta de fuego -->
+    <div id="fireAlertPopup" class="popup-overlay">
+        <div class="popup-content">
+            <div id="popupMessage" class="popup-message"></div>
+            <div class="popup-actions">
+                <button id="closePopupButton" class="close-button">Cerrar</button>
+            </div>
+        </div>
     </div>
     
     <!-- Sección de Reportes -->
-    <div id="reports-section" class="mt-4">
-        <h2>Reportes de Fuego</h2>
-        <div id="reports-list" class="mt-3">
-            <!-- Aquí se mostrarán los reportes dinámicamente -->
+    <div id="reports-section" class="reports-section" style="display:none;">
+        <h2 class="reports-title">Reportes</h2>
+        <div class="table-container">
+            <table class="reports-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Mensaje</th>
+                        <th>Waypoints</th>
+                        <th>Reportado por</th>
+                    </tr>
+                </thead>
+                <tbody id="reports-list">
+                    <!-- Aquí se mostrarán los reportes dinámicamente -->
+                </tbody>
+            </table>
         </div>
+        
         <button id="refresh-reports" class="report-fire-btn">Actualizar Reportes</button>
     </div>    
 
-    
+    <div id="about" style="display:block;">
+    </div>
+
+    <div id="features" style="display:block;">
+    </div>
+
+    <div id="links" style="display:block;">
+    </div>
 
     <!-- Scripts -->
+    <script>
+        // Hamburger menu functionality
+        document.getElementById('navbar-toggle').addEventListener('click', function() {
+            document.querySelector('.navbar').classList.toggle('active');
+        });
+    </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>
     <script src="app.js"></script>
 </body>
