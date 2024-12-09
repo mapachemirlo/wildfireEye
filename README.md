@@ -1,7 +1,26 @@
-# wildfireEye
-dApp para monitorear focos de incendio con drones, IA y blockchain
+<p align="center">
+  <img src="logo.webp" alt="WildfireEye" />
+</p>
 
-# Guía de Instalación
+
+# Acerca de WildfireEye
+WildfireEye es una dApp, es proyecto desarrollado para contribuir al ecositema blabla mediante la detección de focos de incendio mediante el uso de drones entrenados con modelos de IA y la implementación de la blockchain.
+
+# MVP
+Actualmente WildfireEye es un MVP, que como primer paso solicita que conectes tu wallet, luego que indiques unas coordenas para el recorrido que realizará el dron asociado a tu wallet. 
+Lo que hacemos es simular el descubrimiento de un foco de incendio a traves de la subida de un archivo, luego de esto la dApp mostrará que se dió aviso a las autoridades y al dueño de la address solicitando que registre la información en la blockchain confirmando la transacción, de esta manera podremos ver la nueva información actualizada en la dApp.
+
+# Próximos pasos para WildfireEye
+Dron con capacidad de programación: Muchos drones, como los de DJI (con el SDK disponible) o drones de código abierto como los basados en Pixhawk (utilizando ArduPilot o PX4), permiten este nivel de personalización.
+Controlador de vuelo: Hardware que ejecuta las órdenes programadas, como Pixhawk o DJI Flight Controller.
+Sensores de navegación: GPS, cámaras, sensores de proximidad o LIDAR para evitar obstáculos y seguir la ruta programada.
+
+Software de control de vuelo:
+DJI SDK: Para drones DJI.
+ArduPilot o PX4: Para drones personalizados o de código abierto.
+QGroundControl o Mission Planner: Interfaces gráficas para definir rutas.
+
+# Guía de Instalación del MVP 
 
 ## Prerrequisitos por Sistema Operativo
 
@@ -108,13 +127,13 @@ La instalación es similar en todos los sistemas operativos:
 
 Windows:
 ```powershell
-cd wildfireEye\backend
+cd wildfireEye\backend\fire-detection-backend\
 npm install
 ```
 
 macOS/Linux:
 ```bash
-cd wildfireEye/backend
+cd wildfireEye/backend/fire-detection-backend
 npm install
 ```
 
@@ -124,18 +143,12 @@ Windows (PowerShell):
 ```powershell
 New-Item .env
 Add-Content .env "PORT=3000
-API_KEY=tu_clave_api
-PINATA_API_KEY=tu_clave_pinata
-PINATA_SECRET_KEY=tu_clave_secreta_pinata"
 ```
 
 macOS/Linux:
 ```bash
 cat > .env << EOL
 PORT=3000
-API_KEY=tu_clave_api
-PINATA_API_KEY=tu_clave_pinata
-PINATA_SECRET_KEY=tu_clave_secreta_pinata
 EOL
 ```
 
@@ -143,10 +156,8 @@ EOL
 
 Todos los sistemas:
 ```bash
-# Modo desarrollo
-npm run dev
 
-# Modo producción
+# Modo desarrollo
 npm start
 ```
 
@@ -156,7 +167,7 @@ npm start
 
 Todos los sistemas:
 ```bash
-cd ../contracts
+cd ../contracts/fire-detection
 forge install
 ```
 
@@ -166,7 +177,6 @@ Windows (PowerShell):
 ```powershell
 New-Item .env
 Add-Content .env "PRIVATE_KEY=tu_clave_privada_wallet
-SEPOLIA_RPC_URL=https://sepolia.infura.io/v3/tu_proyecto_id
 ARBITRUM_SEPOLIA_RPC_URL=https://sepolia-rollup.arbitrum.io/rpc
 ETHERSCAN_API_KEY=tu_api_key_etherscan"
 ```
@@ -175,18 +185,17 @@ macOS/Linux:
 ```bash
 cat > .env << EOL
 PRIVATE_KEY=tu_clave_privada_wallet
-SEPOLIA_RPC_URL=https://sepolia.infura.io/v3/tu_proyecto_id
 ARBITRUM_SEPOLIA_RPC_URL=https://sepolia-rollup.arbitrum.io/rpc
 ETHERSCAN_API_KEY=tu_api_key_etherscan
 EOL
 ```
 
-#### Iniciar Blockchain Local (Anvil)
+#### Iniciar Blockchain Local (Anvil) o en Aribitrum Sepolia
 
 Todos los sistemas:
 ```bash
-# Iniciar Anvil con 10 cuentas y 10000 ETH cada una
-anvil --accounts 10 --balance 10000
+# Iniciar Anvil En el caso de que se desee trabajar local
+anvil
 ```
 
 #### Compilar y Desplegar
@@ -197,13 +206,17 @@ Todos los sistemas:
 forge build
 
 # Desplegar en Anvil (local)
-forge script script/Deploy.s.sol:Deploy --rpc-url http://localhost:8545 --broadcast
-
-# Desplegar en Sepolia
-forge script script/Deploy.s.sol:Deploy --rpc-url $SEPOLIA_RPC_URL --broadcast --verify -vvvv
+forge script script/DeployFireDetection.s.sol:DeployFireDetection \
+    --rpc-url http://localhost:8545/ \
+    --private-key mi_clave_privada \
+    --broadcast
 
 # Desplegar en Arbitrum Sepolia
-forge script script/Deploy.s.sol:Deploy --rpc-url $ARBITRUM_SEPOLIA_RPC_URL --broadcast --verify -vvvv
+forge script script/DeployFireDetection.s.sol --rpc-url arbitrum-sepolia --broadcast --verify --sender mi_address --private-key mi_clave_privada
+
+# Enviar gas desde Anvil a mi Wallet (tanto las address como las private_key son estandards)
+cast send --from address_anvil --private-key private_key_anvil --value 10000000000000000000 mi_address
+
 ```
 
 ### 3. Frontend (Servidor HTTP Python)
@@ -225,19 +238,13 @@ cd ../frontend
 Windows:
 ```powershell
 # Python 3.x
-python -m http.server 8080
-
-# Python 2.x (si es necesario)
-python -m SimpleHTTPServer 8080
+python -m http.server
 ```
 
 macOS/Linux:
 ```bash
 # Python 3.x
-python3 -m http.server 8080
-
-# Python 2.x (si es necesario)
-python -m SimpleHTTPServer 8080
+python3 -m http.server
 ```
 
 Acceder al frontend en: `http://localhost:8080`
@@ -250,13 +257,6 @@ Acceder al frontend en: `http://localhost:8080`
 - ID de cadena: 31337
 - Símbolo de la moneda: ETH
 
-### 2. Sepolia Testnet
-- Nombre de la red: Sepolia
-- Nueva URL de RPC: https://sepolia.infura.io/v3/
-- ID de cadena: 11155111
-- Símbolo de la moneda: SEP
-- Explorador de bloques: https://sepolia.etherscan.io
-
 ### 3. Arbitrum Sepolia
 - Nombre de la red: Arbitrum Sepolia
 - Nueva URL de RPC: https://sepolia-rollup.arbitrum.io/rpc
@@ -264,69 +264,6 @@ Acceder al frontend en: `http://localhost:8080`
 - Símbolo de la moneda: ETH
 - Explorador de bloques: https://sepolia.arbiscan.io/
 
-## Flujo de Trabajo Completo
-
-1. **Iniciar Backend**
-```bash
-cd backend
-npm run dev
-```
-
-2. **Iniciar Blockchain Local**
-```bash
-cd contracts
-anvil
-```
-
-3. **Desplegar Contratos**
-En una nueva terminal:
-```bash
-cd contracts
-
-# Local
-forge script script/Deploy.s.sol:Deploy --rpc-url http://localhost:8545 --broadcast
-
-# O en Sepolia/Arbitrum (asegúrate de tener fondos en la wallet)
-forge script script/Deploy.s.sol:Deploy --rpc-url $SEPOLIA_RPC_URL --broadcast --verify
-```
-
-4. **Iniciar Frontend**
-```bash
-cd frontend
-python3 -m http.server 8080
-```
-
-## Solución de Problemas Comunes
-
-### Backend (Node.js)
-```bash
-# Error de dependencias
-rm -rf node_modules package-lock.json
-npm install
-
-# Error de permisos
-sudo chown -R $USER ~/.npm
-```
-
-### Contratos (Foundry)
-```bash
-# Error de compilación
-forge clean
-forge build --force
-
-# Error de nonce en MetaMask
-# Reset cuenta en MetaMask: Configuración > Avanzado > Reset Account
-```
-
-### Frontend (Servidor Python)
-```bash
-# Puerto en uso
-# Intenta con otro puerto
-python3 -m http.server 8081
-
-# Error de permisos
-sudo python3 -m http.server 80  # Si necesitas usar el puerto 80
-```
 
 ## Obtener Tokens de Prueba
 
@@ -350,3 +287,5 @@ sudo python3 -m http.server 80  # Si necesitas usar el puerto 80
 
 ## Licencia
 Este proyecto está licenciado bajo la Licencia MIT - ver el archivo LICENSE.md para más detalles.
+
+
