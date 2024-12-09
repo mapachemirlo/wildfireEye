@@ -20,6 +20,12 @@ DJI SDK: Para drones DJI.
 ArduPilot o PX4: Para drones personalizados o de código abierto.
 QGroundControl o Mission Planner: Interfaces gráficas para definir rutas.
 
+# Presentación PPTX:
+doc: [https://docs.google.com/presentation/d/1VGpXG9A-ZQMfA3z_Bk_wKYFaYK7Km0Bw/edit?usp=sharing&ouid=113359977998999560241&rtpof=true&sd=true]([https://docs.google.com/presentation/d/1VGpXG9A-ZQMfA3z_Bk_wKYFaYK7Km0Bw/edit?usp=sharing&ouid=113359977998999560241&rtpof=true&sd=true])
+
+# Investigación incendios Córdoba - Argentina (2022 - 2024):
+doc: [https://drive.google.com/file/d/1PDPIzk-RAFBE-NQeGrwWsPbwamIYwo1k/view?usp=sharing](https://drive.google.com/file/d/1PDPIzk-RAFBE-NQeGrwWsPbwamIYwo1k/view?usp=sharing)
+
 # Guía de Instalación del MVP 
 
 ## Prerrequisitos por Sistema Operativo
